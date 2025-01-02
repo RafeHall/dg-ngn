@@ -54,6 +54,14 @@ impl Rect {
         }
     }
 
+    pub fn get_begin(&self) -> Vec2 {
+        self.begin
+    }
+
+    pub fn get_end(&self) -> Vec2 {
+        self.end
+    }
+
     // [tl, tr, br, bl]
     pub fn get_corners(&self) -> [Vec2; 4] {
         [
