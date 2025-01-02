@@ -1,0 +1,9 @@
+[package]
+name = "dg-physics"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dg-math = { path = "../dg-math" }
+
+slotmap = "1.0.7"

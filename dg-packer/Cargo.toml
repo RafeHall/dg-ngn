@@ -1,0 +1,21 @@
+[package]
+name = "dg-packer"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+clap = { version = "4.5.23", features = ["derive"] }
+bitcode = { version = "0.6.3", default-features = false, features = ["derive", "std"] }
+flate2 = { version = "1.0.35" }
+serde = { version = "1.0.216", features = ["derive"] }
+thiserror = "2.0.8"
+toml = { version = "0.8.19" }
+gltf = { git = "https://github.com/RafeHall/gltf.git" }
+image = "0.25.5"
+texpresso = "2.0.1"
+rayon = "1.10.0"
+log = "0.4.22"
+env_logger = "0.11.5"
+
+dg-resource = { path = "../dg-resource" }

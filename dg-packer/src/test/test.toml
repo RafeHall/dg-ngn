@@ -1,0 +1,25 @@
+name = "test_manifest"
+
+[[asset]]
+kind = "text"
+path = "a.txt"
+compress = true
+tags = { important = true }
+
+[[asset]]
+kind = "image"
+path = "ogasexy_block.png"
+
+[[asset]]
+kind = "texture"
+path = "ogasexy_block.png"
+mipmaps = true
+
+[[asset]]
+kind = "image"
+path = "grass_texture.png"
+
+[[asset]]
+kind = "texture"
+path = "grass_texture.png"
+mipmaps = true

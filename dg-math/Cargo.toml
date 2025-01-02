@@ -1,0 +1,15 @@
+[package]
+name = "dg-math"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+
+[features]
+default = []
+high-precision = []
+large-integers = []

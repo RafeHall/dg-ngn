@@ -1,0 +1,8 @@
+[package]
+name = "dg-reflect"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dg-reflect-proc = { path = "dg-reflect-proc" }
+dg-math = { path = "../dg-math" }

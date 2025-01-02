@@ -1,0 +1,97 @@
+# Int (64-bit signed integer)
+# Float (64-bit floating point number)
+# Str
+# Bool (true | false)
+# Vec2
+# Vec3
+# Vec4
+# List
+# Map
+# Value
+# Void
+
+# [comment]
+# example comment
+
+# [import] <script>
+% thing;
+
+# [type_alias] <ident> <type>
+= String Str;
+= Boolean Bool;
+= Array List;
+= Dictionary Map;
+= Variant Value;
+
+# [sum_type] <ident> <variants>
++ Enum Foo Bar Baz;
++ Option Some v Value None;
++ Result Ok v Value Err e Value;
+
+# [product_type] <ident> <fields>
+* Empty;
+* Dialog name Str message Str;
+* BoundInt min Int max Int value Int;
+* Struct foo Str bar List;
+
+# [exponent_type] <ident> <parameters> <return_type> <body>
+^ Function v Int -> Int => v;
+^ DoNothing => ;
+^ UseNothing v Variant =>;
+^ Square a Int -> Int => * a a;
+^ Sum a Int b Int -> Int => + a b;
+
+## Vector2 class with an x and y Float value
+* Vector2 x Float y Float;
+
+^ Vector2.One -> Vector2 => @Vector2 1.0 1.0;
+^ Vector2.NegOne -> Vector2 => @Vector2 -1.0 -1.0;
+
+^ Vector2.Up -> Vector2 => @Vector2 0.0 -1.0;
+^ Vector2.Down -> Vector2 => @Vector2 0.0 1.0;
+^ Vector2.Left -> Vector2 => @Vector2 1.0 0.0;
+^ Vector2.Right -> Vector2 => @Vector2 -1.0 0.0;
+
+^ Vector2.Cross a Vector2 b Vector2 -> Float => - * a.x b.y * b.x a.y;
+^ Vector2.Dot a Vector2 b Vector2 -> Float => + * a.x b.x * a.y b.y;
+
+^ Vector2.Neg v Vector2 -> Vector2 => @Vector2 ~ v.x ~ v.y;
+
+^ Vector2.Add a Vector2 b Vector2 -> Vector2 => @Vector2 + a.x b.x + a.y b.y;
+^ Vector2.Sub a Vector2 b Vector2 -> Vector2 => @Vector2 - a.x b.x - a.y b.y;
+^ Vector2.Mul a Vector2 b Vector2 -> Vector2 => @Vector2 * a.x b.x * a.y b.y;
+^ Vector2.Div a Vector2 b Vector2 -> Vector2 => @Vector2 / a.x b.x / a.y b.y;
+
+^ Vector2.AddF a Vector2 b Float -> Vector2 => @Vector2 + a.x b + a.y b;
+^ Vector2.SubF a Vector2 b Float -> Vector2 => @Vector2 - a.x b - a.y b;
+^ Vector2.MulF a Vector2 b Float -> Vector2 => @Vector2 * a.x b * a.y b;
+^ Vector2.DivF a Vector2 b Float -> Vector2 => @Vector2 / a.x b / a.y b;
+
+^ Vector2.LenSq v Vector2 -> Float => * + v.x v.x + v.y v.y;
+^ Vector2.Len v Vector2 -> Float => @Float.Sqrt @Vector2.LenSq v;
+
+^ Vector2.DistSq a Vector2 b Vector2 -> Float => + @Float.PowI - b.x a.x 2 @Float.PowI - b.y a.y 2;
+
+^ Vector2.Dist a Vector2 b Vector2 -> Float => @Float.Sqrt @Vector2.Dist a b;
+
+^ Vector2.Round v Vector2 -> Vector2 => @Vector2 @Float.Round v.x @Float.Round v.y;
+^ Vector2.Ceil v Vector2 -> Vector2 => @Vector2 @Float.Ceil v.x @Float.Ceil v.y;
+^ Vector2.Floor v Vector2 -> Vector2 => @Vector2 @Float.Floor v.x @Float.Floor v.y;
+^ Vector2.Abs v Vector2 -> Vector2 => @Vector2 @Float.Abs v.x @Float.Abs v.y;
+
+# Elm architecture
+= Model Int;
+
++ Message
+    Increment amount Int
+    Decrement amount Int
+    Reset;
+
+^ Update msg Message mdl Model =>
+    $ msg
+        Increment += mdl amount
+        Decrement -= mdl amount
+        Reset = mdl 0;
+
+^ View mdl Model -> Str =>
+    @Int.ToStr mdl;

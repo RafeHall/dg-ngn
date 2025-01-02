@@ -1,0 +1,14 @@
+[package]
+name = "dg-renderer"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dg-math = { path = "../dg-math" }
+dg-structures = { path = "../dg-structures" }
+
+vulkano = "0.34"
+log = "0.4.22"
+
+[profile.dev]
+opt-level = 1

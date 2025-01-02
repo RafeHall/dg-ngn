@@ -1,0 +1,14 @@
+# Control
+Label:
+    text_color: white;
+    text_outline_size: 2px;
+    text_outline_color: black;
+
+# Control Variant
+Panel:Classy:
+    border_width: 1px;
+    border_color: red;
+
+# Identifier
+Image@Cow:
+    image: "cow.png";

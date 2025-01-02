@@ -1,0 +1,19 @@
+[package]
+name = "demos"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "voxel"
+path = "voxel.rs"
+
+[[bin]]
+name = "physics"
+path = "physics.rs"
+
+[dependencies]
+dg-runtime = { path = "../dg-runtime" }
+dg-physics = { path = "../dg-physics" }
+dg-math = { path = "../dg-math", features = ["high-precision"] }
+
+macroquad = "0.4.13"

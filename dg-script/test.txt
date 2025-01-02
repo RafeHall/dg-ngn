@@ -1,0 +1,1779 @@
+
+running 2 tests
+test parser::tests::test_parser ... Some(
+    Script {
+        items: [
+            Import(
+                Import {
+                    script: Ident {
+                        ident: "thing",
+                    },
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "String",
+                    },
+                    ty: TypeName {
+                        name: "Str",
+                    },
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "Boolean",
+                    },
+                    ty: TypeName {
+                        name: "Bool",
+                    },
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "Array",
+                    },
+                    ty: TypeName {
+                        name: "List",
+                    },
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "Dictionary",
+                    },
+                    ty: TypeName {
+                        name: "Map",
+                    },
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "Variant",
+                    },
+                    ty: TypeName {
+                        name: "Value",
+                    },
+                },
+            ),
+            Sum(
+                SumType {
+                    name: TypeName {
+                        name: "Enum",
+                    },
+                    variants: [
+                        ProductType {
+                            name: TypeName {
+                                name: "Foo",
+                            },
+                            variables: [],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "Bar",
+                            },
+                            variables: [],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "Baz",
+                            },
+                            variables: [],
+                        },
+                    ],
+                },
+            ),
+            Sum(
+                SumType {
+                    name: TypeName {
+                        name: "Option",
+                    },
+                    variants: [
+                        ProductType {
+                            name: TypeName {
+                                name: "Some",
+                            },
+                            variables: [
+                                Variable {
+                                    name: Ident {
+                                        ident: "v",
+                                    },
+                                    ty: TypeName {
+                                        name: "Value",
+                                    },
+                                },
+                            ],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "None",
+                            },
+                            variables: [],
+                        },
+                    ],
+                },
+            ),
+            Sum(
+                SumType {
+                    name: TypeName {
+                        name: "Result",
+                    },
+                    variants: [
+                        ProductType {
+                            name: TypeName {
+                                name: "Ok",
+                            },
+                            variables: [
+                                Variable {
+                                    name: Ident {
+                                        ident: "v",
+                                    },
+                                    ty: TypeName {
+                                        name: "Value",
+                                    },
+                                },
+                            ],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "Err",
+                            },
+                            variables: [
+                                Variable {
+                                    name: Ident {
+                                        ident: "e",
+                                    },
+                                    ty: TypeName {
+                                        name: "Value",
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ),
+            Product(
+                ProductType {
+                    name: TypeName {
+                        name: "Empty",
+                    },
+                    variables: [],
+                },
+            ),
+            Product(
+                ProductType {
+                    name: TypeName {
+                        name: "Dialog",
+                    },
+                    variables: [
+                        Variable {
+                            name: Ident {
+                                ident: "name",
+                            },
+                            ty: TypeName {
+                                name: "Str",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "message",
+                            },
+                            ty: TypeName {
+                                name: "Str",
+                            },
+                        },
+                    ],
+                },
+            ),
+            Product(
+                ProductType {
+                    name: TypeName {
+                        name: "BoundInt",
+                    },
+                    variables: [
+                        Variable {
+                            name: Ident {
+                                ident: "min",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "max",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "value",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                    ],
+                },
+            ),
+            Product(
+                ProductType {
+                    name: TypeName {
+                        name: "Struct",
+                    },
+                    variables: [
+                        Variable {
+                            name: Ident {
+                                ident: "foo",
+                            },
+                            ty: TypeName {
+                                name: "Str",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "bar",
+                            },
+                            ty: TypeName {
+                                name: "List",
+                            },
+                        },
+                    ],
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Function",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Int",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "DoNothing",
+                    },
+                    parameters: [],
+                    ret_ty: None,
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "UseNothing",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Variant",
+                            },
+                        },
+                    ],
+                    ret_ty: None,
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Square",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Int",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Sum",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Int",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Int",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Product(
+                ProductType {
+                    name: TypeName {
+                        name: "Vector2",
+                    },
+                    variables: [
+                        Variable {
+                            name: Ident {
+                                ident: "x",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "y",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                    ],
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.One",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.NegOne",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Up",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Down",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Left",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Right",
+                    },
+                    parameters: [],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Cross",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Dot",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Neg",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Add",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Sub",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Mul",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Div",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.AddF",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.SubF",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.MulF",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.DivF",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Float",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.LenSq",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Len",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.DistSq",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Dist",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "a",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "b",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Float",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Round",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Ceil",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Floor",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Vector2.Abs",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "v",
+                            },
+                            ty: TypeName {
+                                name: "Vector2",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Vector2",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+            Alias(
+                AliasType {
+                    name: TypeName {
+                        name: "Model",
+                    },
+                    ty: TypeName {
+                        name: "Int",
+                    },
+                },
+            ),
+            Sum(
+                SumType {
+                    name: TypeName {
+                        name: "Message",
+                    },
+                    variants: [
+                        ProductType {
+                            name: TypeName {
+                                name: "Increment",
+                            },
+                            variables: [
+                                Variable {
+                                    name: Ident {
+                                        ident: "amount",
+                                    },
+                                    ty: TypeName {
+                                        name: "Int",
+                                    },
+                                },
+                            ],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "Decrement",
+                            },
+                            variables: [
+                                Variable {
+                                    name: Ident {
+                                        ident: "amount",
+                                    },
+                                    ty: TypeName {
+                                        name: "Int",
+                                    },
+                                },
+                            ],
+                        },
+                        ProductType {
+                            name: TypeName {
+                                name: "Reset",
+                            },
+                            variables: [],
+                        },
+                    ],
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "Update",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "msg",
+                            },
+                            ty: TypeName {
+                                name: "Message",
+                            },
+                        },
+                        Variable {
+                            name: Ident {
+                                ident: "mdl",
+                            },
+                            ty: TypeName {
+                                name: "Model",
+                            },
+                        },
+                    ],
+                    ret_ty: None,
+                    body: Body,
+                },
+            ),
+            Exponent(
+                ExponentType {
+                    name: TypeName {
+                        name: "View",
+                    },
+                    parameters: [
+                        Variable {
+                            name: Ident {
+                                ident: "mdl",
+                            },
+                            ty: TypeName {
+                                name: "Model",
+                            },
+                        },
+                    ],
+                    ret_ty: Some(
+                        TypeName {
+                            name: "Str",
+                        },
+                    ),
+                    body: Body,
+                },
+            ),
+        ],
+    },
+)
+ok
+test tokenizer::tests::test_example ... Comment(false) = `# Int (64-bit signed integer)\r\n`
+Comment(false) = `# Float (64-bit floating point number)\r\n`
+Comment(false) = `# Str\r\n`
+Comment(false) = `# Bool (true | false)\r\n`
+Comment(false) = `# Vec2\r\n`
+Comment(false) = `# Vec3\r\n`
+Comment(false) = `# Vec4\r\n`
+Comment(false) = `# List\r\n`
+Comment(false) = `# Map\r\n`
+Comment(false) = `# Value\r\n`
+Comment(false) = `# Void\r\n\r\n`
+Comment(false) = `# [comment]\r\n`
+Comment(false) = `# example comment\r\n\r\n`
+Comment(false) = `# [import] <script>\r\n`
+Percent = `%`
+Ident = `thing`
+Semicolon = `;`
+Comment(false) = `# [type_alias] <ident> <type>\r\n`
+Equals = `=`
+Type = `String`
+Type = `Str`
+Semicolon = `;`
+Equals = `=`
+Type = `Boolean`
+Type = `Bool`
+Semicolon = `;`
+Equals = `=`
+Type = `Array`
+Type = `List`
+Semicolon = `;`
+Equals = `=`
+Type = `Dictionary`
+Type = `Map`
+Semicolon = `;`
+Equals = `=`
+Type = `Variant`
+Type = `Value`
+Semicolon = `;`
+Comment(false) = `# [sum_type] <ident> <variants>\r\n`
+Plus = `+`
+Type = `Enum`
+Type = `Foo`
+Type = `Bar`
+Type = `Baz`
+Semicolon = `;`
+Plus = `+`
+Type = `Option`
+Type = `Some`
+Ident = `v`
+Type = `Value`
+Type = `None`
+Semicolon = `;`
+Plus = `+`
+Type = `Result`
+Type = `Ok`
+Ident = `v`
+Type = `Value`
+Type = `Err`
+Ident = `e`
+Type = `Value`
+Semicolon = `;`
+Comment(false) = `# [product_type] <ident> <fields>\r\n`
+Asterisk = `*`
+Type = `Empty`
+Semicolon = `;`
+Asterisk = `*`
+Type = `Dialog`
+Ident = `name`
+Type = `Str`
+Ident = `message`
+Type = `Str`
+Semicolon = `;`
+Asterisk = `*`
+Type = `BoundInt`
+Ident = `min`
+Type = `Int`
+Ident = `max`
+Type = `Int`
+Ident = `value`
+Type = `Int`
+Semicolon = `;`
+Asterisk = `*`
+Type = `Struct`
+Ident = `foo`
+Type = `Str`
+Ident = `bar`
+Type = `List`
+Semicolon = `;`
+Comment(false) = `# [exponent_type] <ident> <parameters> <return_type> <body>\r\n`
+Caret = `^`
+Type = `Function`
+Ident = `v`
+Type = `Int`
+Returns = `->`
+Type = `Int`
+WithBody = `=>`
+Ident = `v`
+Semicolon = `;`
+Caret = `^`
+Type = `DoNothing`
+WithBody = `=>`
+Semicolon = `;`
+Caret = `^`
+Type = `UseNothing`
+Ident = `v`
+Type = `Variant`
+WithBody = `=>`
+Semicolon = `;`
+Caret = `^`
+Type = `Square`
+Ident = `a`
+Type = `Int`
+Returns = `->`
+Type = `Int`
+WithBody = `=>`
+Asterisk = `*`
+Ident = `a`
+Ident = `a`
+Semicolon = `;`
+Caret = `^`
+Type = `Sum`
+Ident = `a`
+Type = `Int`
+Ident = `b`
+Type = `Int`
+Returns = `->`
+Type = `Int`
+WithBody = `=>`
+Plus = `+`
+Ident = `a`
+Ident = `b`
+Semicolon = `;`
+Comment(true) = `## Vector2 class with an x and y Float value\r\n`
+Asterisk = `*`
+Type = `Vector2`
+Ident = `x`
+Type = `Float`
+Ident = `y`
+Type = `Float`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.One`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Literal(Float) = `1.0`
+Literal(Float) = `1.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.NegOne`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Minus = `-`
+Literal(Float) = `1.0`
+Minus = `-`
+Literal(Float) = `1.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Up`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Literal(Float) = `0.0`
+Minus = `-`
+Literal(Float) = `1.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Down`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Literal(Float) = `0.0`
+Literal(Float) = `1.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Left`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Literal(Float) = `1.0`
+Literal(Float) = `0.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Right`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Minus = `-`
+Literal(Float) = `1.0`
+Literal(Float) = `0.0`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Cross`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Minus = `-`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Asterisk = `*`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Dot`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Plus = `+`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Neg`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Neg = `~`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Neg = `~`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Add`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Plus = `+`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Plus = `+`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Sub`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Minus = `-`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Minus = `-`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Mul`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Div`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Slash = `/`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Slash = `/`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.AddF`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Float`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Plus = `+`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Plus = `+`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.SubF`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Float`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Minus = `-`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Minus = `-`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.MulF`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Float`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Asterisk = `*`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.DivF`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Float`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Slash = `/`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Ident = `b`
+Slash = `/`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Ident = `b`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.LenSq`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Asterisk = `*`
+Plus = `+`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Plus = `+`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Len`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Call = `@Float.Sqrt`
+Call = `@Vector`
+Literal(Float) = `2.`
+Type = `LenSq`
+Ident = `v`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.DistSq`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Plus = `+`
+Call = `@Float.PowI`
+Minus = `-`
+Ident = `b`
+Dot = `.`
+Ident = `x`
+Ident = `a`
+Dot = `.`
+Ident = `x`
+Literal(Int(Decimal)) = `2`
+Call = `@Float.PowI`
+Minus = `-`
+Ident = `b`
+Dot = `.`
+Ident = `y`
+Ident = `a`
+Dot = `.`
+Ident = `y`
+Literal(Int(Decimal)) = `2`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Dist`
+Ident = `a`
+Type = `Vector2`
+Ident = `b`
+Type = `Vector2`
+Returns = `->`
+Type = `Float`
+WithBody = `=>`
+Call = `@Float.Sqrt`
+Call = `@Vector`
+Literal(Float) = `2.`
+Type = `Dist`
+Ident = `a`
+Ident = `b`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Round`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Call = `@Float.Round`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Call = `@Float.Round`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Ceil`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Call = `@Float.Ceil`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Call = `@Float.Ceil`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Floor`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Call = `@Float.Floor`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Call = `@Float.Floor`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Caret = `^`
+Type = `Vector2.Abs`
+Ident = `v`
+Type = `Vector2`
+Returns = `->`
+Type = `Vector2`
+WithBody = `=>`
+Call = `@Vector`
+Literal(Int(Decimal)) = `2`
+Call = `@Float.Abs`
+Ident = `v`
+Dot = `.`
+Ident = `x`
+Call = `@Float.Abs`
+Ident = `v`
+Dot = `.`
+Ident = `y`
+Semicolon = `;`
+Comment(false) = `# Elm architecture\r\n`
+Equals = `=`
+Type = `Model`
+Type = `Int`
+Semicolon = `;`
+Plus = `+`
+Type = `Message`
+Type = `Increment`
+Ident = `amount`
+Type = `Int`
+Type = `Decrement`
+Ident = `amount`
+Type = `Int`
+Type = `Reset`
+Semicolon = `;`
+Caret = `^`
+Type = `Update`
+Ident = `msg`
+Type = `Message`
+Ident = `mdl`
+Type = `Model`
+WithBody = `=>`
+Dollar = `$`
+Type = `Message`
+Type = `Increment`
+PlusEquals = `+=`
+Ident = `mdl`
+Ident = `amount`
+Type = `Decrement`
+MinusEquals = `-=`
+Ident = `mdl`
+Ident = `amount`
+Type = `Reset`
+Equals = `=`
+Ident = `mdl`
+Literal(Int(Decimal)) = `0`
+Semicolon = `;`
+Caret = `^`
+Type = `View`
+Ident = `mdl`
+Type = `Model`
+Returns = `->`
+Type = `Str`
+WithBody = `=>`
+Call = `@Int.ToStr`
+Ident = `mdl`
+Semicolon = `;`
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
