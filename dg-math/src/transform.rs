@@ -3,7 +3,7 @@ use crate::{
 };
 
 // Effectively a column major 3x2 matrix in memory
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transform2D {
     pub x: Vec2,
     pub y: Vec2,
@@ -71,7 +71,7 @@ impl Transform2D {
 }
 
 // Effectively a column major 4x3 matrix in memory
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Transform3D {
     pub x: Vec3,
     pub y: Vec3,
