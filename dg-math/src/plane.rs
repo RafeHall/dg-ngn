@@ -19,7 +19,7 @@ impl Plane {
         Self { normal, distance }
     }
 
-    pub fn from_points_clockwise(a: Vec3, b: Vec3, c: Vec3) -> Self {
+    pub fn new_from_points_clockwise(a: Vec3, b: Vec3, c: Vec3) -> Self {
         let va = b.sub(a);
         let vb = c.sub(a);
 
@@ -29,7 +29,7 @@ impl Plane {
         Plane::new(normal, distance)
     }
 
-    pub fn from_points_counter_clockwise(a: Vec3, b: Vec3, c: Vec3) -> Self {
+    pub fn new_from_points_counter_clockwise(a: Vec3, b: Vec3, c: Vec3) -> Self {
         let va = b.sub(a);
         let vb = c.sub(a);
 
