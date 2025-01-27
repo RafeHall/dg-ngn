@@ -90,10 +90,6 @@ impl Transform3D {
         Self { origin, x, y, z }
     }
 
-    pub fn get_origin(&self) -> Vec3 {
-        self.origin
-    }
-
     pub fn set_origin(&mut self, origin: Vec3) {
         self.origin = origin;
     }
