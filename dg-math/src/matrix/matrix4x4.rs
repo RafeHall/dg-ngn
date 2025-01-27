@@ -1,8 +1,8 @@
 use std::{fmt::Display, ops::{Index, IndexMut}};
 
-use crate::vector::{Vec3, Vec4};
+use crate::{vector::{Vec3, Vec4}, ApproxEq};
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct Matrix4x4 {
     pub r0: Vec4,
     pub r1: Vec4,
@@ -134,6 +134,15 @@ impl Matrix4x4 {
         };
 
         std::mem::swap(a, b);
+    }
+}
+
+impl ApproxEq for Matrix4x4 {
+    fn approx_eq(&self, other: &Self) -> bool {
+        self.r0.approx_eq(&other.r0) &&
+        self.r1.approx_eq(&other.r1) &&
+        self.r2.approx_eq(&other.r2) &&
+        self.r3.approx_eq(&other.r3)
     }
 }
 

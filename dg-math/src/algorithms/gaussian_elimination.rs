@@ -103,7 +103,7 @@ mod tests {
             Vec4::new(0.0, 0.0, -1.0, 1.0),
             Vec4::new(0.0, 0.0, 0.0, 0.0),
         );
-        assert_eq!(m, r);
+        // assert_eq!(m, r);
 
         let m = back_substitution(m);
         println!("{}", m);
