@@ -2,6 +2,9 @@ use std::ops::{Index, IndexMut};
 
 use super::Scalar;
 
+include!("colors.rs");
+
+/// sRGB
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Color {
     pub r: Scalar,
@@ -57,9 +60,31 @@ impl Color {
 
 		Ok(Self::from_hex_int(hex_int))
 	}
-}
 
-include!("colors.rs");
+    pub fn to_linear(&self) -> Color {
+        fn c(v: Scalar) -> Scalar {
+            if v <= 0.04045 {
+                v / 12.92
+            } else {
+                ((v + 0.055) / 1.055).powf(2.4)
+            }
+        }
+
+        Self::new_alpha(c(self.r), c(self.g), c(self.b), c(self.a))
+    }
+
+    pub fn to_srgb(&self) -> Color {
+        fn c(v: Scalar) -> Scalar {
+            if v <= 0.0031308 {
+                v * 12.92
+            } else {
+                1.055 * v.powf(1.0 / 2.4) - 0.055
+            }
+        }
+
+        Self::new_alpha(c(self.r), c(self.g), c(self.b), c(self.a))
+    }
+}
 
 impl Index<usize> for Color {
     type Output = Scalar;
@@ -86,3 +111,11 @@ impl IndexMut<usize> for Color {
         }
     }
 }
+
+// #[derive(Debug, Clone, Copy, PartialEq)]
+// pub struct LinearColor {
+//     pub r: Scalar,
+//     pub g: Scalar,
+//     pub b: Scalar,
+//     pub a: Scalar,
+// }
