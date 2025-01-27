@@ -1,8 +1,10 @@
 use std::ops::{Index, IndexMut};
 
-use super::{interp::LinearInterp, vector::Vec2, Scalar, line::Line};
+use crate::ApproxEq;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+use super::{interp::LinearInterp, line::Line, vector::Vec2, Scalar};
+
+#[derive(Debug, Clone, Copy)]
 pub struct Rect {
     begin: Vec2,
     end: Vec2,
@@ -11,10 +13,14 @@ pub struct Rect {
 impl Rect {
     // pub const ZERO: Rect = Rect::new(Vec2::ZERO, Vec2::ZERO);
 
-    pub fn new(begin: Vec2, end: Vec2) -> Rect {
-        let begin = Vec2::new(begin.x.min(end.x), begin.y.min(end.y));
-        let end = Vec2::new(begin.x.max(end.x), begin.y.max(end.y));
+    pub fn new(a: Vec2, b: Vec2) -> Rect {
+        let begin = a.vmin(b);
+        let end = a.vmax(b);
 
+        Self { begin, end }
+    }
+
+    pub const fn new_unchecked(begin: Vec2, end: Vec2) -> Rect {
         Self { begin, end }
     }
 
@@ -54,16 +60,16 @@ impl Rect {
         }
     }
 
-    pub fn get_begin(&self) -> Vec2 {
+    pub fn begin(&self) -> Vec2 {
         self.begin
     }
 
-    pub fn get_end(&self) -> Vec2 {
+    pub fn end(&self) -> Vec2 {
         self.end
     }
 
     // [tl, tr, br, bl]
-    pub fn get_corners(&self) -> [Vec2; 4] {
+    pub fn corners(&self) -> [Vec2; 4] {
         [
             self.begin,
             Vec2::new(self.end.x, self.begin.y),
@@ -88,47 +94,53 @@ impl Rect {
         self.area() <= eps
     }
 
-    pub fn get_center(&self) -> Vec2 {
+    pub fn center(&self) -> Vec2 {
         self.begin.add(self.size().mul_scalar(0.5))
     }
 
+    pub fn set_center(&self, center: Vec2) -> Rect {
+        let cur_center = self.center();
+        let offset = center.sub(cur_center);
+        self.offset(offset)
+    }
+
+    pub fn offset(&self, offset: Vec2) -> Rect {
+        Rect::new_unchecked(self.begin.add(offset), self.end.add(offset))
+    }
+
     pub fn has_point(&self, point: Vec2) -> bool {
-        self.begin.x < point.x
-            && self.end.x > point.x
-            && self.begin.y < point.y
-            && self.end.y > point.y
+        self.begin.less_than(point) && self.end.greater_than(point)
     }
 
     pub fn has_point_inclusive(&self, point: Vec2) -> bool {
-        self.begin.x <= point.x
-            && self.end.x >= point.x
-            && self.begin.y <= point.y
-            && self.end.y >= point.y
+        self.begin.less_than_equals(point) && self.end.greater_than_equals(point)
     }
 
-    pub fn intersection(&self, other: Rect) -> Rect {
-        debug_assert!(self.intersects(other));
+    pub fn intersection(&self, other: Rect) -> Option<Rect> {
+        if !self.intersects(other) {
+            return None;
+        }
 
-        Self::new(
-            Vec2::new(
-                self.begin.x.max(other.begin.x),
-                self.begin.y.max(other.begin.y),
-            ),
-            Vec2::new(self.end.x.min(other.end.x), self.end.y.min(other.end.y)),
-        )
+        Some(Self::new(
+            self.begin.vmax(other.begin),
+            self.end.vmin(other.end),
+        ))
     }
 
     pub fn intersects(&self, other: Rect) -> bool {
-        self.begin.x.max(other.begin.x) < self.end.x.min(other.end.x)
-            && self.begin.y.max(other.begin.y) < self.end.y.min(other.end.y)
+        let begin = self.begin.vmax(other.begin);
+        let end = self.end.vmin(other.end);
+
+        begin.less_than(end)
     }
 
     pub fn intersects_inclusive(&self, other: Rect) -> bool {
-        self.begin.x.max(other.begin.x) <= self.end.x.min(other.end.x)
-            && self.begin.y.max(other.begin.y) <= self.end.y.min(other.end.y)
+        let begin = self.begin.vmax(other.begin);
+        let end = self.end.vmin(other.end);
+
+        begin.less_than_equals(end)
     }
 
-    // #[inline]
     // pub fn line_intersection(&self, _line: Line) -> Vec2 {
     //     todo!()
     // }
@@ -138,17 +150,11 @@ impl Rect {
     }
 
     pub fn encloses(&self, other: Rect) -> bool {
-        self.has_point(other.begin)
-            && self.has_point(other.end)
-            && self.has_point(Vec2::new(other.begin.x, other.end.y))
-            && self.has_point(Vec2::new(other.end.x, other.begin.y))
+        self.has_point(other.begin) && self.has_point(other.end)
     }
 
     pub fn encloses_inclusive(&self, other: Rect) -> bool {
-        self.has_point_inclusive(other.begin)
-            && self.has_point_inclusive(other.end)
-            && self.has_point_inclusive(Vec2::new(other.begin.x, other.end.y))
-            && self.has_point_inclusive(Vec2::new(other.end.x, other.begin.y))
+        self.has_point_inclusive(other.begin) && self.has_point_inclusive(other.end)
     }
 
     pub fn encapsulate(&self, other: Rect) -> Rect {
@@ -196,8 +202,12 @@ impl Rect {
             self.end.add(Vec2::new(right * 2.0, bottom * 2.0)),
         )
     }
+}
 
-
+impl ApproxEq for Rect {
+    fn approx_eq(&self, other: &Self) -> bool {
+        self.begin.approx_eq(&other.begin) && self.end.approx_eq(&other.end)
+    }
 }
 
 impl Index<usize> for Rect {
@@ -225,5 +235,175 @@ impl IndexMut<usize> for Rect {
 impl LinearInterp for Rect {
     fn lerp(a: Self, b: Self, t: Scalar) -> Self {
         Self::new(a.begin.lerp_to(b.begin, t), a.end.lerp_to(b.end, t))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{assert_approx_eq, assert_approx_ne, vector::Vec2};
+
+    use super::Rect;
+
+    #[test]
+    fn has_point() {
+        {
+            let rect = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let point = Vec2::new(0.0, 0.0);
+    
+            assert_eq!(rect.has_point(point), true);
+            assert_eq!(rect.has_point_inclusive(point), true);
+        }
+
+        {
+            let rect = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let point = Vec2::new(16.0, 0.0);
+    
+            assert_eq!(rect.has_point(point), false);
+            assert_eq!(rect.has_point_inclusive(point), true);
+        }
+
+        {
+            let rect = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let point = Vec2::new(-15.0, -15.0);
+    
+            assert_eq!(rect.has_point(point), true);
+            assert_eq!(rect.has_point_inclusive(point), true);
+        }
+
+        {
+            let rect = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let point = Vec2::new(-16.0, -8.0);
+    
+            assert_eq!(rect.has_point(point), false);
+            assert_eq!(rect.has_point_inclusive(point), true);
+        }
+    }
+
+    #[test]
+    fn intersection() {
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let intersection = a.intersection(b).unwrap();
+    
+            assert_approx_eq!(a, b);
+            assert_approx_eq!(a, intersection);
+            assert_approx_eq!(b, intersection);
+        }
+
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = Rect::new(Vec2::new(-1.0, -1.0), Vec2::new(1.0, 1.0));
+            let intersection = a.intersection(b).unwrap();
+    
+            assert_approx_ne!(a, b);
+            assert_approx_ne!(a, intersection);
+            assert_approx_eq!(b, intersection);
+        }
+
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = Rect::new(Vec2::new(0.0, 0.0), Vec2::new(32.0, 32.0));
+            let intersection = a.intersection(b).unwrap();
+    
+            assert_approx_ne!(a, b);
+            assert_approx_ne!(a, intersection);
+            assert_approx_ne!(b, intersection);
+            assert_approx_eq!(
+                intersection,
+                Rect::new(Vec2::new(0.0, 0.0), Vec2::new(16.0, 16.0))
+            );
+        }
+
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(0.0, 0.0));
+            let b = Rect::new(Vec2::new(0.0, 0.0), Vec2::new(16.0, 16.0));
+            let intersection = a.intersection(b);
+    
+            assert!(intersection.is_none());
+        }
+    }
+
+    #[test]
+    fn encloses() {
+        // A and B same rect
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = a.clone();
+            let encloses = a.encloses(b);
+            let encloses_inclusive = a.encloses_inclusive(b);
+
+            assert!(!encloses, "{:?} should not enclose {:?}", a, b);
+            assert!(
+                encloses_inclusive,
+                "{:?} should enclose inclusively {:?}",
+                a, b
+            );
+        }
+
+        // A similar rect to B, A larger than B
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = Rect::new(Vec2::new(-1.0, -1.0), Vec2::new(1.0, 1.0));
+            let encloses = a.encloses(b);
+            let encloses_inclusive = a.encloses_inclusive(b);
+
+            assert!(encloses, "{:?} should enclose {:?}", a, b);
+            assert!(
+                encloses_inclusive,
+                "{:?} should enclose inclusively {:?}",
+                a, b
+            );
+
+            let encloses = b.encloses(a);
+            let encloses_inclusive = b.encloses_inclusive(a);
+
+            assert!(!encloses, "{:?} should not enclose {:?}", b, a);
+            assert!(
+                !encloses_inclusive,
+                "{:?} should not enclose inclusively {:?}",
+                b, a
+            );
+        }
+
+        // A and B intersect but do not enclose eachother
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(16.0, 16.0));
+            let b = Rect::new(Vec2::new(0.0, 0.0), Vec2::new(32.0, 32.0));
+            let encloses = a.encloses(b);
+            let encloses_inclusive = a.encloses_inclusive(b);
+
+            assert!(!encloses, "{:?} should not enclose {:?}", a, b);
+            assert!(
+                !encloses_inclusive,
+                "{:?} should not enclose inclusively {:?}",
+                a, b
+            );
+
+            let encloses = b.encloses(a);
+            let encloses_inclusive = b.encloses_inclusive(a);
+
+            assert!(!encloses, "{:?} should not enclose {:?}", b, a);
+            assert!(
+                !encloses_inclusive,
+                "{:?} should not enclose inclusively {:?}",
+                b, a
+            );
+        }
+
+        // A and B share a corner but do not intersect
+        {
+            let a = Rect::new(Vec2::new(-16.0, -16.0), Vec2::new(0.0, 0.0));
+            let b = Rect::new(Vec2::new(0.0, 0.0), Vec2::new(16.0, 16.0));
+            let encloses = a.encloses(b);
+            let encloses_inclusive = a.encloses_inclusive(b);
+
+            assert!(!encloses, "{:?} should not enclose {:?}", a, b);
+            assert!(
+                !encloses_inclusive,
+                "{:?} should not enclose inclusively {:?}",
+                a, b
+            );
+        }
     }
 }
