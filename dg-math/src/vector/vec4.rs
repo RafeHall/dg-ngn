@@ -5,6 +5,8 @@ use std::{
 
 use crate::{interp::LinearInterp, ApproxEq, Scalar};
 
+use super::Vec3;
+
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Vec4 {
     pub x: Scalar,
@@ -47,7 +49,6 @@ impl Vec4 {
         Self { x, y, z, w }
     }
 
-    #[inline]
     pub fn add(&self, other: Vec4) -> Vec4 {
         Vec4::new(
             self.x + other.x,
@@ -57,7 +58,6 @@ impl Vec4 {
         )
     }
 
-    #[inline]
     pub fn sub(&self, other: Vec4) -> Vec4 {
         Vec4::new(
             self.x - other.x,
@@ -67,7 +67,6 @@ impl Vec4 {
         )
     }
 
-    #[inline]
     pub fn div(&self, other: Vec4) -> Vec4 {
         Vec4::new(
             self.x / other.x,
@@ -77,7 +76,6 @@ impl Vec4 {
         )
     }
 
-    #[inline]
     pub fn mul(&self, other: Vec4) -> Vec4 {
         Vec4::new(
             self.x * other.x,
@@ -87,19 +85,75 @@ impl Vec4 {
         )
     }
 
-    #[inline]
+    pub fn add_scalar(&self, other: Scalar) -> Vec4 {
+        Self::new(self.x + other, self.y + other, self.z + other, self.w + other)
+    }
+
+    pub fn sub_scalar(&self, other: Scalar) -> Vec4 {
+        Self::new(self.x - other, self.y - other, self.z - other, self.w - other)
+    }
+
+    pub fn div_scalar(&self, other: Scalar) -> Vec4 {
+        Self::new(self.x / other, self.y / other, self.z / other, self.w / other)
+    }
+
+    pub fn mul_scalar(&self, other: Scalar) -> Vec4 {
+        Self::new(self.x * other, self.y * other, self.z * other, self.w * other)
+    }
+
+    pub fn neg(&self) -> Vec4 {
+        Self::new(-self.x, -self.y, -self.z, -self.w)
+    }
+
     pub fn inverse(&self) -> Vec4 {
+        self.neg()
+    }
+
+    pub fn reciprocal(&self) -> Vec4 {
         Self::new(1.0 / self.x, 1.0 / self.y, 1.0 / self.z, 1.0 / self.w)
+    }
+
+    pub fn truncate(&self) -> Vec3 {
+        Vec3::new(self.x, self.y, self.z)
+    }
+
+    /// Returns true if all components of `self` are greater than `other`
+    pub fn greater_than(&self, other: Vec4) -> bool {
+        self.x > other.x && self.y > other.y && self.z > other.z && self.w > other.w
+    }
+
+    /// Returns true if all components of `self` are greater than or equal to `other`
+    pub fn greater_than_equals(&self, other: Vec4) -> bool {
+        self.x >= other.x && self.y >= other.y && self.z >= other.z && self.w >= other.w
+    }
+
+    /// Returns true if all components of `self` are greater than `other`
+    pub fn less_than(&self, other: Vec4) -> bool {
+        self.x < other.x && self.y < other.y && self.z < other.z && self.w < other.w
+    }
+
+    /// Returns true if all components of `self` are less than or equal to `other`
+    pub fn less_than_equals(&self, other: Vec4) -> bool {
+        self.x <= other.x && self.y <= other.y && self.z <= other.z && self.w <= other.w
     }
 
     pub fn max(&self) -> Scalar {
         self.x.max(self.y.max(self.z.max(self.w)))
     }
 
+    pub fn vmax(&self, other: Vec4) -> Vec4 {
+        Self::new(
+            self.x.max(other.x),
+            self.y.max(other.y),
+            self.z.max(other.z),
+            self.w.max(other.w),
+        )
+    }
+
     pub fn imax(&self) -> usize {
         match (self.x, self.y, self.z, self.w) {
             (x, y, z, w) if x > y && x > z && x > w => 0,
-            (x, y, z, w) if y > x && y > z && w > w => 1,
+            (x, y, z, w) if y > x && y > z && y > w => 1,
             (x, y, z, w) if z > x && z > y && z > w => 2,
             (x, y, z, w) if w > x && w > y && w > z => 3,
             _ => 0,
@@ -107,17 +161,93 @@ impl Vec4 {
     }
 
     pub fn min(&self) -> Scalar {
-        self.x.min(self.y.min(self.x.min(self.w)))
+        self.x.min(self.y.min(self.x))
+    }
+
+    pub fn vmin(&self, other: Vec4) -> Vec4 {
+        Self::new(
+            self.x.min(other.x),
+            self.y.min(other.y),
+            self.z.min(other.z),
+            self.w.min(other.w),
+        )
     }
 
     pub fn imin(&self) -> usize {
         match (self.x, self.y, self.z, self.w) {
             (x, y, z, w) if x < y && x < z && x < w => 0,
-            (x, y, z, w) if y < x && y < z && w < w => 1,
+            (x, y, z, w) if y < x && y < z && y < w => 1,
             (x, y, z, w) if z < x && z < y && z < w => 2,
             (x, y, z, w) if w < x && w < y && w < z => 3,
             _ => 0,
         }
+    }
+
+    pub fn dot(&self, other: Vec4) -> Scalar {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+
+    pub fn cross(&self, other: Vec4) -> Vec4 {
+        todo!()
+    }
+
+    pub fn to(&self, to: Vec4) -> Vec4 {
+        to.sub(*self)
+    }
+
+    pub fn direction_to(&self, to: Vec4) -> Vec4 {
+        self.to(to).normalized()
+    }
+
+    pub fn distance_to(&self, to: Vec4) -> Scalar {
+        self.distance_squared_to(to).sqrt()
+    }
+
+    pub fn distance_squared_to(&self, to: Vec4) -> Scalar {
+        // NOTE: x.powi(2) is just as fast as x * x
+        (to.x - self.x).powi(2) + (to.y - self.y).powi(2) + (to.z - self.z).powi(2) + (to.w - self.w).powi(2)
+    }
+
+    pub fn length(&self) -> Scalar {
+        self.length_squared().sqrt()
+    }
+
+    pub fn length_squared(&self) -> Scalar {
+        self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
+    }
+
+    pub fn normalized(&self) -> Vec4 {
+        self.div_scalar(self.length())
+    }
+
+    pub fn clamp(&self, min: Vec4, max: Vec4) -> Vec4 {
+        Self::new(
+            self.x.clamp(min.x, max.x),
+            self.y.clamp(min.y, max.y),
+            self.z.clamp(min.z, max.z),
+            self.w.clamp(min.w, max.w),
+        )
+    }
+
+    pub fn clamp_scalar(&self, min: Scalar, max: Scalar) -> Vec4 {
+        Self::new(
+            self.x.clamp(min, max),
+            self.y.clamp(min, max),
+            self.z.clamp(min, max),
+            self.w.clamp(min, max),
+        )
+    }
+
+    pub fn round(&self) -> Vec4 {
+        Self::new(self.x.round(), self.y.round(), self.z.round(), self.w.round())
+    }
+
+    pub fn floor(&self) -> Vec4 {
+        Self::new(self.x.floor(), self.y.floor(), self.z.floor(), self.w.floor())
+    }
+
+    pub fn ceil(&self) -> Vec4 {
+        Self::new(self.x.ceil(), self.y.ceil(), self.z.ceil(), self.w.ceil())
     }
 
     pub fn abs(&self) -> Vec4 {
