@@ -1,8 +1,0 @@
-[package]
-name = "dg-partition"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-dg-math = { path = "../dg-math" }
-dg-structures = { path = "../dg-structures" }
