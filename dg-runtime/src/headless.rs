@@ -17,10 +17,6 @@ pub fn run_headless(mut runner: impl Runner) {
 
         
         if fixed_steps > 0 {
-            // if fixed_steps > 1 {
-                
-            // }
-
             runner.fixed_update(&mut app);
             if app.exit {
                 break;
