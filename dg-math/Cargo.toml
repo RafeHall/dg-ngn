@@ -14,7 +14,3 @@ default = []
 high-precision = []
 large-integers = []
 simd = []
-
-[[bench]]
-name = "simd"
-harness = false
