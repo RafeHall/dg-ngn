@@ -9,7 +9,7 @@
 - [x] Vec3
 - [ ] IVec3
 
-- [/] Vec4
+- [x] Vec4
 - [ ] IVec4
 
 - [/] Matrix3
@@ -57,7 +57,7 @@
     [Maya], [Right], [(-#x(), +#y(), +#z())], [(+#x(), +#y(), -#z())], [cm],
     [gltf], [Right], [(#sym.plus.minus?, +#y()/#z, #sym.plus.minus?)], [(+#x(), +#y(), -#z())], [m],
     [usd], [Right], [(#sym.plus.minus?, +#y()/#z, #sym.plus.minus?)], [(+#x(), +#y(), -#z())], [cm],
-    [*dg-ngn*], [Left], [(+#x(), +#y(), -#z())], [(+#x(), +#y(), -#z())], [1/32 meter],
+    [*dg-ngn*], [Right], [(+#x(), +#y(), -#z())], [(+#x(), +#y(), -#z())], [m],
   )
 ]
 

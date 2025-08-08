@@ -4,7 +4,6 @@ use crate::{vector::Vec3, ApproxEq};
 
 use super::{interp::LinearInterp, vector::Vec2, Scalar};
 
-/// Line used for slicing
 #[derive(Debug, Clone, Copy)]
 pub struct Line {
     pub start: Vec2,

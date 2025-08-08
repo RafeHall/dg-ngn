@@ -14,7 +14,7 @@ use super::Scalar;
 ///
 /// +Pitch tilts down
 ///
-/// +Roll spins counterclockwise
+/// +Roll spins clockwise
 #[derive(Debug)]
 pub struct Rotor {
     pub a: Scalar,

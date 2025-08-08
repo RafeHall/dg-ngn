@@ -1,4 +1,6 @@
-#![feature(adt_const_params)]
+// #![cfg_attr(feature = "simd", feature(portable_simd))]
+
+use std::fmt::Debug;
 
 pub mod aabb;
 pub mod algorithms;
@@ -12,8 +14,10 @@ pub mod projection;
 pub mod ray;
 pub mod rect;
 pub mod rotor;
-pub mod transform;
+pub mod global_transform;
 pub mod vector;
+pub mod polar;
+pub mod circle;
 
 #[cfg(not(feature = "high-precision"))]
 pub type Scalar = f32;

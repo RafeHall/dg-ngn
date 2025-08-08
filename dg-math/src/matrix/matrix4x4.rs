@@ -32,16 +32,33 @@ impl Matrix4x4 {
             r3: Vec4::new(c0.w, c1.w, c2.w, c3.w),
         }
     }
-
-    pub fn xform_matrix(&self, other: &Matrix4x4) -> Matrix4x4 {
-        todo!()
-    }
-
-    pub fn xform_vec4(&self, other: Vec4) -> Vec4 {
-        todo!()
-    }
-
+    
     pub fn xform_vec3(&self, other: Vec3) -> Vec3 {
+        let v = other.extend(1.0);
+        let r = self.xform_vec4(v);
+        if r.w.approx_eq(&0.0) {
+            r.truncate()
+        } else {
+            r.truncate().mul_scalar(r.w)
+        }
+
+        // Vec3::new(
+        //     other.x * self.r0.x + other.y * self.r0.y + other.z * self.r0.z + self.r0.w,
+        //     other.x * self.r1.x + other.y * self.r1.y + other.z * self.r1.z + self.r1.w,
+        //     other.x * self.r2.x + other.y * self.r2.y + other.z * self.r2.z + self.r2.w,
+        // )
+    }
+    
+    pub fn xform_vec4(&self, other: Vec4) -> Vec4 {
+        Vec4::new(
+            other.x * self.r0.x + other.y * self.r0.y + other.z * self.r0.z + other.w * self.r0.w,
+            other.x * self.r1.x + other.y * self.r1.y + other.z * self.r1.z + other.w * self.r1.w,
+            other.x * self.r2.x + other.y * self.r2.y + other.z * self.r2.z + other.w * self.r2.w,
+            other.x * self.r3.x + other.y * self.r3.y + other.z * self.r3.z + other.w * self.r3.w,
+        )
+    }
+    
+    pub fn xform_matrix(&self, other: &Matrix4x4) -> Matrix4x4 {
         todo!()
     }
 

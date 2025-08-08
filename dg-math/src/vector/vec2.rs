@@ -5,13 +5,13 @@ use std::{
 };
 
 use crate::{
-    interp::{LinearInterp, SphericalInterp},
-    ApproxEq, Scalar,
+    interp::{LinearInterp, SphericalInterp}, polar::Polar, ApproxEq, Integer, Scalar
 };
 
-use super::Vec3;
+use super::{IVec2, Vec3};
 
 /// Representation of a vector in 2d space using `x` and `y` [`Scalar`]
+#[repr(C)]
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Vec2 {
     pub x: Scalar,
@@ -56,6 +56,11 @@ impl Vec2 {
     ///
     pub fn new_from_angle(angle: Scalar) -> Vec2 {
         Self::new(angle.cos(), angle.sin())
+    }
+
+    /// Construct [`Vec2`] using `v` for both components
+    pub const fn splat(v: Scalar) -> Vec2 {
+        Self { x: v, y: v }
     }
 
     /// Adds each component of the vectors together
@@ -281,11 +286,36 @@ impl Vec2 {
     pub fn bounce(&self, normal: Vec2, strength: Scalar) -> Vec2 {
         self.reflect(normal).mul_scalar(strength)
     }
+
+    pub fn to_ivec2(&self) -> IVec2 {
+        IVec2::new(self.x as Integer, self.y as Integer)
+    }
 }
 
 impl ApproxEq for Vec2 {
     fn approx_eq(&self, other: &Self) -> bool {
         self.x.approx_eq(&other.x) && self.y.approx_eq(&other.y)
+    }
+}
+
+impl Into<[f32; 2]> for Vec2 {
+    fn into(self) -> [f32; 2] {
+        [self.x as f32, self.y as f32]
+    }
+}
+
+impl Into<[f64; 2]> for Vec2 {
+    fn into(self) -> [f64; 2] {
+        [self.x as f64, self.y as f64]
+    }
+}
+
+impl Into<Polar> for Vec2 {
+    fn into(self) -> Polar {
+        Polar {
+            radius: self.length(),
+            angle: self.angle(),
+        }
     }
 }
 

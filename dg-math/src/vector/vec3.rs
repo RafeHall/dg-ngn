@@ -12,6 +12,7 @@ use crate::{
 use super::{Vec2, Vec4};
 
 /// Representation of a vector in 3d space using `x`, `y`, and `z` [`Scalar`]
+#[repr(C)]
 #[derive(Debug, Default, Clone, Copy)]
 pub struct Vec3 {
     pub x: Scalar,
@@ -257,11 +258,34 @@ impl Vec3 {
     pub fn bounce(&self, normal: Vec3, strength: Scalar) -> Vec3 {
         self.reflect(normal).mul_scalar(strength)
     }
+
+    pub fn tangents(&self) -> (Vec3, Vec3) {
+        let mut tangent = self.cross(Vec3::UP);
+        if tangent.length_squared() < Self::EPS {
+            tangent = self.cross(Vec3::RIGHT);
+        }
+
+        let cotangent = self.cross(tangent);
+
+        (tangent, cotangent)
+    }
 }
 
 impl ApproxEq for Vec3 {
     fn approx_eq(&self, other: &Self) -> bool {
         self.x.approx_eq(&other.x) && self.y.approx_eq(&other.y) && self.z.approx_eq(&other.z)
+    }
+}
+
+impl Into<[f32; 3]> for Vec3 {
+    fn into(self) -> [f32; 3] {
+        [self.x as f32, self.y as f32, self.z as f32]
+    }
+}
+
+impl Into<[f64; 3]> for Vec3 {
+    fn into(self) -> [f64; 3] {
+        [self.x as f64, self.y as f64, self.z as f64]
     }
 }
 

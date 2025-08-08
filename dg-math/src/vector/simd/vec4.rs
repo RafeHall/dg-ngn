@@ -1,20 +1,18 @@
 use std::{
-    fmt::Display,
-    ops::{Index, IndexMut},
+    ops::{Add, Deref, DerefMut, Div, Mul, Neg, Sub},
+    simd::{num::SimdFloat, StdFloat},
 };
 
-use crate::{interp::LinearInterp, ApproxEq, Scalar};
+use crate::Scalar;
 
-use super::Vec3;
+#[cfg(feature = "high-precision")]
+type Scalar4 = std::simd::f64x4;
+#[cfg(not(feature = "high-precision"))]
+type Scalar4 = std::simd::f32x4;
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Debug, Default, Clone, Copy)]
-pub struct Vec4 {
-    pub x: Scalar,
-    pub y: Scalar,
-    pub z: Scalar,
-    pub w: Scalar,
-}
+pub struct Vec4(pub(crate) Scalar4);
 
 impl Vec4 {
     pub const UP: Vec4 = Vec4::new(0.0, 1.0, 0.0, 1.0);
@@ -48,64 +46,73 @@ impl Vec4 {
 
     #[inline]
     pub const fn new(x: Scalar, y: Scalar, z: Scalar, w: Scalar) -> Self {
-        Self { x, y, z, w }
+        Self(Scalar4::from_array([x, y, z, w]))
     }
 
     #[inline]
     pub fn add(&self, other: Vec4) -> Vec4 {
-        Vec4::new(
-            self.x + other.x,
-            self.y + other.y,
-            self.z + other.z,
-            self.w + other.w,
-        )
+        // Vec4::new(
+        //     self.x + other.x,
+        //     self.y + other.y,
+        //     self.z + other.z,
+        //     self.w + other.w,
+        // )
+        Self(self.0.add(other.0))
     }
 
     pub fn sub(&self, other: Vec4) -> Vec4 {
-        Vec4::new(
-            self.x - other.x,
-            self.y - other.y,
-            self.z - other.z,
-            self.w - other.w,
-        )
+        // Vec4::new(
+        //     self.x - other.x,
+        //     self.y - other.y,
+        //     self.z - other.z,
+        //     self.w - other.w,
+        // )
+        Self(self.0.sub(other.0))
     }
 
     pub fn div(&self, other: Vec4) -> Vec4 {
-        Vec4::new(
-            self.x / other.x,
-            self.y / other.y,
-            self.z / other.z,
-            self.w / other.w,
-        )
+        // Vec4::new(
+        //     self.x / other.x,
+        //     self.y / other.y,
+        //     self.z / other.z,
+        //     self.w / other.w,
+        // )
+        Self(self.0.div(other.0))
     }
 
     pub fn mul(&self, other: Vec4) -> Vec4 {
-        Vec4::new(
-            self.x * other.x,
-            self.y * other.y,
-            self.z * other.z,
-            self.w * other.w,
-        )
+        // Vec4::new(
+        //     self.x * other.x,
+        //     self.y * other.y,
+        //     self.z * other.z,
+        //     self.w * other.w,
+        // )
+        Self(self.0.mul(other.0))
     }
 
     pub fn add_scalar(&self, other: Scalar) -> Vec4 {
-        Self::new(self.x + other, self.y + other, self.z + other, self.w + other)
+        // Self::new(self.x + other, self.y + other, self.z + other, self.w + other)
+        Self(self.0.add(Scalar4::splat(other)))
     }
 
     pub fn sub_scalar(&self, other: Scalar) -> Vec4 {
-        Self::new(self.x - other, self.y - other, self.z - other, self.w - other)
+        // Self::new(self.x - other, self.y - other, self.z - other, self.w - other)
+        Self(self.0.sub(Scalar4::splat(other)))
     }
 
     pub fn div_scalar(&self, other: Scalar) -> Vec4 {
-        Self::new(self.x / other, self.y / other, self.z / other, self.w / other)
+        // Self::new(self.x / other, self.y / other, self.z / other, self.w / other)
+        Self(self.0.div(Scalar4::splat(other)))
     }
 
     pub fn mul_scalar(&self, other: Scalar) -> Vec4 {
-        Self::new(self.x * other, self.y * other, self.z * other, self.w * other)
+        // Self::new(self.x * other, self.y * other, self.z * other, self.w * other)
+        Self(self.0.mul(Scalar4::splat(other)))
     }
 
     pub fn neg(&self) -> Vec4 {
-        Self::new(-self.x, -self.y, -self.z, -self.w)
+        // Self::new(-self.x, -self.y, -self.z, -self.w)
+        Self(self.0.neg())
     }
 
     pub fn inverse(&self) -> Vec4 {
@@ -113,12 +120,13 @@ impl Vec4 {
     }
 
     pub fn reciprocal(&self) -> Vec4 {
-        Self::new(1.0 / self.x, 1.0 / self.y, 1.0 / self.z, 1.0 / self.w)
+        // Self::new(1.0 / self.x, 1.0 / self.y, 1.0 / self.z, 1.0 / self.w)
+        Self(self.0.recip())
     }
 
-    pub fn truncate(&self) -> Vec3 {
-        Vec3::new(self.x, self.y, self.z)
-    }
+    // pub fn truncate(&self) -> Vec3 {
+    //     Vec3::new(self.x, self.y, self.z)
+    // }
 
     /// Returns true if all components of `self` are greater than `other`
     pub fn greater_than(&self, other: Vec4) -> bool {
@@ -141,16 +149,18 @@ impl Vec4 {
     }
 
     pub fn max(&self) -> Scalar {
-        self.x.max(self.y.max(self.z.max(self.w)))
+        // self.x.max(self.y.max(self.z.max(self.w)))
+        self.0.reduce_max()
     }
 
     pub fn vmax(&self, other: Vec4) -> Vec4 {
-        Self::new(
-            self.x.max(other.x),
-            self.y.max(other.y),
-            self.z.max(other.z),
-            self.w.max(other.w),
-        )
+        // Self::new(
+        //     self.x.max(other.x),
+        //     self.y.max(other.y),
+        //     self.z.max(other.z),
+        //     self.w.max(other.w),
+        // )
+        Self(self.0.simd_max(other.0))
     }
 
     pub fn imax(&self) -> usize {
@@ -164,16 +174,18 @@ impl Vec4 {
     }
 
     pub fn min(&self) -> Scalar {
-        self.x.min(self.y.min(self.x))
+        // self.x.min(self.y.min(self.x))
+        self.0.reduce_min()
     }
 
     pub fn vmin(&self, other: Vec4) -> Vec4 {
-        Self::new(
-            self.x.min(other.x),
-            self.y.min(other.y),
-            self.z.min(other.z),
-            self.w.min(other.w),
-        )
+        // Self::new(
+        //     self.x.min(other.x),
+        //     self.y.min(other.y),
+        //     self.z.min(other.z),
+        //     self.w.min(other.w),
+        // )
+        Self(self.0.simd_min(other.0))
     }
 
     pub fn imin(&self) -> usize {
@@ -188,7 +200,12 @@ impl Vec4 {
 
     #[inline]
     pub fn dot(&self, other: Vec4) -> Scalar {
-        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+        // self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+        self.0.mul(other.0).reduce_sum()
+    }
+
+    pub fn cross(&self, other: Vec4) -> Vec4 {
+        todo!()
     }
 
     pub fn to(&self, to: Vec4) -> Vec4 {
@@ -205,7 +222,10 @@ impl Vec4 {
 
     pub fn distance_squared_to(&self, to: Vec4) -> Scalar {
         // NOTE: x.powi(2) is just as fast as x * x
-        (to.x - self.x).powi(2) + (to.y - self.y).powi(2) + (to.z - self.z).powi(2) + (to.w - self.w).powi(2)
+        // (to.x - self.x).powi(2) + (to.y - self.y).powi(2) + (to.z - self.z).powi(2) + (to.w - self.w).powi(2)
+
+        let v = to.0.sub(self.0);
+        v.mul(v).reduce_sum()
     }
 
     pub fn length(&self) -> Scalar {
@@ -213,7 +233,8 @@ impl Vec4 {
     }
 
     pub fn length_squared(&self) -> Scalar {
-        self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
+        self.0.mul(self.0).reduce_sum()
+        // self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
     }
 
     pub fn normalized(&self) -> Vec4 {
@@ -221,12 +242,7 @@ impl Vec4 {
     }
 
     pub fn clamp(&self, min: Vec4, max: Vec4) -> Vec4 {
-        Self::new(
-            self.x.clamp(min.x, max.x),
-            self.y.clamp(min.y, max.y),
-            self.z.clamp(min.z, max.z),
-            self.w.clamp(min.w, max.w),
-        )
+        Self(self.0.simd_clamp(min.0, max.0))
     }
 
     pub fn clamp_scalar(&self, min: Scalar, max: Scalar) -> Vec4 {
@@ -236,107 +252,48 @@ impl Vec4 {
             self.z.clamp(min, max),
             self.w.clamp(min, max),
         )
+        // Self(self.0.simd_clamp(Scalar4::splat(min), Scalar4::splat(max)))
     }
 
     pub fn round(&self) -> Vec4 {
-        Self::new(self.x.round(), self.y.round(), self.z.round(), self.w.round())
+        Self(self.0.round())
     }
 
     pub fn floor(&self) -> Vec4 {
-        Self::new(self.x.floor(), self.y.floor(), self.z.floor(), self.w.floor())
+        Self(self.0.floor())
     }
 
     pub fn ceil(&self) -> Vec4 {
-        Self::new(self.x.ceil(), self.y.ceil(), self.z.ceil(), self.w.ceil())
+        Self(self.0.ceil())
     }
 
     pub fn abs(&self) -> Vec4 {
-        Self::new(self.x.abs(), self.y.abs(), self.z.abs(), self.w.abs())
+        Self(self.0.abs())
     }
 }
 
-impl ApproxEq for Vec4 {
-    fn approx_eq(&self, other: &Self) -> bool {
-        self.x.approx_eq(&other.x)
-            && self.y.approx_eq(&other.y)
-            && self.z.approx_eq(&other.z)
-            && self.w.approx_eq(&other.w)
+impl Deref for Vec4 {
+    type Target = crate::vector::Vec4;
+
+    fn deref<'a>(&'a self) -> &'a Self::Target {
+        unsafe { std::mem::transmute::<&'a Self, &'a Self::Target>(self) }
     }
 }
 
-impl Into<[f32; 4]> for Vec4 {
-    fn into(self) -> [f32; 4] {
-        [self.x as f32, self.y as f32, self.z as f32, self.w as f32]
-    }
-}
-
-impl Into<[f64; 4]> for Vec4 {
-    fn into(self) -> [f64; 4] {
-        [self.x as f64, self.y as f64, self.z as f64, self.w as f64]
-    }
-}
-
-
-impl Index<usize> for Vec4 {
-    type Output = Scalar;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        match index {
-            0 => &self.x,
-            1 => &self.y,
-            2 => &self.z,
-            3 => &self.w,
-            _ => {
-                panic!("Invalid index");
-            }
-        }
-    }
-}
-
-impl IndexMut<usize> for Vec4 {
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        match index {
-            0 => &mut self.x,
-            1 => &mut self.y,
-            2 => &mut self.z,
-            3 => &mut self.w,
-            _ => {
-                panic!("Invalid index");
-            }
-        }
-    }
-}
-
-impl LinearInterp for Vec4 {
-    fn lerp(a: Self, b: Self, t: Scalar) -> Self {
-        Vec4::new(
-            a.x.lerp_to(b.x, t),
-            a.y.lerp_to(b.y, t),
-            a.z.lerp_to(b.z, t),
-            a.w.lerp_to(b.w, t),
-        )
-    }
-}
-
-impl Display for Vec4 {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+impl DerefMut for Vec4 {
+    fn deref_mut<'a>(&'a mut self) -> &'a mut Self::Target {
+        unsafe { std::mem::transmute::<&'a mut Self, &'a mut Self::Target>(self) }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::interp::LinearInterp;
-
     use super::Vec4;
 
     #[test]
-    fn interpolation() {
-        let a = Vec4::new(-1.0, 0.0, 0.0, 1.0);
-        let b = Vec4::new(1.0, 0.0, 0.0, 1.0);
-
-        let _c = Vec4::lerp(a, b, 0.5);
-
-        // assert_eq!(c, Vec4::new(0.0, 0.0, 0.0, 1.0));
+    fn test() {
+        let v = Vec4::new(4.6425, 2.1278, 1.8716, 0.0);
+        let v = v.clamp_scalar(1.0, 2.0);
+        println!("{:#?}", v);
     }
 }

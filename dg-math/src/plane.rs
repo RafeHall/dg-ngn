@@ -72,7 +72,11 @@ impl Plane {
     // solving the system of linear equations using guassian elimination...
     pub fn three_plane_intersection(&self, _b: &Plane, _c: &Plane) -> Vec3 {
         todo!()
-    } 
+    }
+
+    pub fn translate(&self, translation: Vec3) -> Plane {
+        Plane::new(self.normal, self.distance + translation.dot(self.normal))
+    }
 }
 
 impl ApproxEq for Plane {
@@ -270,6 +274,51 @@ mod tests {
         let r = p.project(v);
 
         assert_approx_eq!(r, Vec3::new(59182.0, 0.0, -25901.0));
+    }
+
+    #[test]
+    fn translate() {
+        let p = Plane::new(Vec3::UP, 0.0);
+        let v = Vec3::new(0.0, 5.0, 0.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::UP, 5.0));
+
+        let p = Plane::new(Vec3::UP, 0.0);
+        let v = Vec3::new(0.0, -5.0, 0.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::UP, -5.0));
+
+        let p = Plane::new(Vec3::DOWN, 0.0);
+        let v = Vec3::new(0.0, 5.0, 0.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::DOWN, -5.0));
+
+        let p = Plane::new(Vec3::DOWN, 0.0);
+        let v = Vec3::new(0.0, -5.0, 0.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::DOWN, 5.0));
+
+        let p = Plane::new(Vec3::UP, 0.0);
+        let v = Vec3::new(59173.0, 0.0, -19471.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(p, r);
+
+        let p = Plane::new(Vec3::UP, 0.0);
+        let v = Vec3::new(59173.0, 1.0, -19471.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::UP, 1.0));
+
+        let p = Plane::new(Vec3::new(1.0, 1.0, 0.0).normalized(), 0.0);
+        let v = Vec3::new(0.0, 1.0, 0.0);
+        let r = p.translate(v);
+
+        assert_approx_eq!(r, Plane::new(Vec3::new(1.0, 1.0, 0.0).normalized(), 0.7071067811));
     }
 
     // #[test]
